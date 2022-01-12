@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Recipe } from './recipe.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipesService {
+  
+
   private recipes: Recipe[] = [
     {
       id: 'r1',
@@ -19,6 +22,10 @@ export class RecipesService {
       ingredients: ['Spaghetti', 'Beef', 'Tomatoes']
     }
   ]
+
+  private recipesSource = new BehaviorSubject(this.recipes);
+  recipesObs = this.recipesSource.asObservable();
+
   constructor() { }
 
   getAllRecipes(){
@@ -31,7 +38,12 @@ export class RecipesService {
     return {
       ...this.recipes.find(recipe => {
       return recipe.id === recipeId;
-    })
+      })
+    } 
   }
+
+  delete(recipeId: string){
+    this.recipes = this.recipes.filter(recipe => recipe.id !== recipeId);
+    this.recipesSource.next(this.recipes);
   }
 }
