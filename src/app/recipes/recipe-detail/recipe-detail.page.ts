@@ -50,6 +50,7 @@ export class RecipeDetailPage implements OnInit {
       ]
     });
     confirmDelete.present();
+    
   }
 
 }
